@@ -398,9 +398,9 @@ for lines in outfieldersData:
 
 
 
-database.close();
-connect.commit();
-connect.close();
+database.close(); 
+connect.commit(); 
+connect.close(); #close connection
 
 #end loading
 
