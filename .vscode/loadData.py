@@ -33,7 +33,7 @@ database.execute('DROP TABLE IF EXISTS Outfielders');
 
 #creating schemas for each table
 database.execute('''CREATE TABLE League (
-    RankId     INT NOT NULL AUTO_INCREMENT,
+    LeagueRankId     INT NOT NULL,
     Team     VARCHAR(12) NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
@@ -48,34 +48,25 @@ database.execute('''CREATE TABLE League (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC   INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (LeagueRankId)
 )''');
 
 database.execute('''CREATE TABLE Reds (
-    RankId      INT NOT NULL AUTO_INCREMENT,
+    RankId      INT NOT NULL,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    Age       INT NOT NULL,
+    Height    VARCHAR(6),
+    Weight    VARCHAR(7),
+    Country VARCHAR(25),
     Position  VARCHAR(14) NOT NULL,
-    G         INT NOT NULL,
-    PA        INT NOT NULL,
-    HR        INT NOT NULL,
-    R         INT NOT NULL,
-    RBI       INT NOT NULL,
-    SB        INT NOT NULL,
-    BB       VARCHAR(5) NOT NULL,
-    K        VARCHAR(5) NOT NULL,
-    AVG       DECIMAL(5,3) NOT NULL,
-    OBP       DECIMAL(5,3) NOT NULL,
-    SLG       DECIMAL(5,3) NOT NULL,
-    wOBA      DECIMAL(5,3) NOT NULL,
-    wRC     INT NOT NULL,
     PRIMARY KEY (RankId)
 )''');
 
 database.execute('''CREATE TABLE Catchers (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -89,13 +80,14 @@ database.execute('''CREATE TABLE Catchers (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 database.execute('''CREATE TABLE FirstBasemen (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -109,13 +101,14 @@ database.execute('''CREATE TABLE FirstBasemen (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 database.execute('''CREATE TABLE SecondBasemen (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -129,13 +122,14 @@ database.execute('''CREATE TABLE SecondBasemen (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 database.execute('''CREATE TABLE ThirdBasemen (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -149,13 +143,14 @@ database.execute('''CREATE TABLE ThirdBasemen (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 database.execute('''CREATE TABLE Shortstops (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -169,13 +164,14 @@ database.execute('''CREATE TABLE Shortstops (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 database.execute('''CREATE TABLE Outfielders (
-    RankId     INT NOT NULL AUTO_INCREMENT,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
+    TeamRank      INT NOT NULL,
     G        INT NOT NULL,
     PA       INT NOT NULL,
     HR       INT NOT NULL,
@@ -189,7 +185,8 @@ database.execute('''CREATE TABLE Outfielders (
     SLG      DECIMAL(5,3) NOT NULL,
     wOBA     DECIMAL(5,3) NOT NULL,
     wRC    INT NOT NULL,
-    PRIMARY KEY (RankId)
+    PRIMARY KEY (FirstName, LastName),
+    FOREIGN KEY (TeamRank) REFERENCES Reds(RankId)
 )''');
 
 #opening each data file
@@ -214,31 +211,48 @@ outfieldersData = csv.reader(file_Outfielders, delimiter=',')
 
 #load data for league table
 for lines in leagueData:
-    team = lines[0]
-    G = lines[1]
-    PA = lines[2]
-    HR = lines[3]
-    R = lines[4]
-    RBI = lines[5]
-    SB = lines[6]
-    BB = lines[7]
-    K = lines[8]
-    AVG = lines[9]
-    OBP = lines[10]
-    SLG = lines[11]
-    wOBA = lines[12]
-    wRC = lines[13]
+    rank = lines[0]
+    team = lines[1]
+    G = lines[2]
+    PA = lines[3]
+    HR = lines[4]
+    R = lines[5]
+    RBI = lines[6]
+    SB = lines[7]
+    BB = lines[8]
+    K = lines[9]
+    AVG = lines[10]
+    OBP = lines[11]
+    SLG = lines[12]
+    wOBA = lines[13]
+    wRC = lines[14]
 
-    sql = "INSERT INTO League (Team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    vals = (team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+    sql = "INSERT INTO League (LeagueRankId, Team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    vals = (rank, team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
     database.execute(sql, vals)
 
 #load data for reds table
 for lines in redsData:
-   firstName = lines[0]
-   lastName = lines[1]
-   position = lines[2]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   position = lines[3]
+   age = lines[4]
+   height = lines[5]
+   weight = lines[6]
+   country = lines[7]
+
+   sql = "INSERT INTO Reds (RankId, FirstName, LastName, Age, Height, Weight, Country, Position) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (rank, firstName, lastName, age, height, weight, country, position)
+
+   database.execute(sql, vals)
+
+#load data for catchers table
+for lines in catchersData:
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
    G = lines[3]
    PA = lines[4]
    HR = lines[5]
@@ -253,146 +267,128 @@ for lines in redsData:
    wOBA = lines[14]
    wRC = lines[15]
 
-   sql = "INSERT INTO Reds (FirstName, LastName, Position, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, position, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
-
-   database.execute(sql, vals)
-
-#load data for catchers table
-for lines in catchersData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
-
-   sql = "INSERT INTO Catchers (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO Catchers (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
 #load data for firstbasemen table
 for lines in firstBasemenData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   G = lines[3]
+   PA = lines[4]
+   HR = lines[5]
+   R = lines[6]
+   RBI = lines[7]
+   SB = lines[8]
+   BB = lines[9]
+   K = lines[10]
+   AVG = lines[11]
+   OBP = lines[12]
+   SLG = lines[13]
+   wOBA = lines[14]
+   wRC = lines[15]
 
-   sql = "INSERT INTO FirstBasemen (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO FirstBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
 #load data for secondbasemen table
 for lines in secondBasemenData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   G = lines[3]
+   PA = lines[4]
+   HR = lines[5]
+   R = lines[6]
+   RBI = lines[7]
+   SB = lines[8]
+   BB = lines[9]
+   K = lines[10]
+   AVG = lines[11]
+   OBP = lines[12]
+   SLG = lines[13]
+   wOBA = lines[14]
+   wRC = lines[15]
 
-   sql = "INSERT INTO SecondBasemen (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO SecondBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
 #load data for thirdbasemen table
 for lines in thirdBasemenData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   G = lines[3]
+   PA = lines[4]
+   HR = lines[5]
+   R = lines[6]
+   RBI = lines[7]
+   SB = lines[8]
+   BB = lines[9]
+   K = lines[10]
+   AVG = lines[11]
+   OBP = lines[12]
+   SLG = lines[13]
+   wOBA = lines[14]
+   wRC = lines[15]
 
-   sql = "INSERT INTO ThirdBasemen (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO ThirdBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
 #load data for shortstops table
 for lines in shortstopsBasemenData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   G = lines[3]
+   PA = lines[4]
+   HR = lines[5]
+   R = lines[6]
+   RBI = lines[7]
+   SB = lines[8]
+   BB = lines[9]
+   K = lines[10]
+   AVG = lines[11]
+   OBP = lines[12]
+   SLG = lines[13]
+   wOBA = lines[14]
+   wRC = lines[15]
 
-   sql = "INSERT INTO Shortstops (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO Shortstops (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
 #load data for outfielders table
 for lines in outfieldersData:
-   firstName = lines[0]
-   lastName = lines[1]
-   G = lines[2]
-   PA = lines[3]
-   HR = lines[4]
-   R = lines[5]
-   RBI = lines[6]
-   SB = lines[7]
-   BB = lines[8]
-   K = lines[9]
-   AVG = lines[10]
-   OBP = lines[11]
-   SLG = lines[12]
-   wOBA = lines[13]
-   wRC = lines[14]
+   rank = lines[0]
+   firstName = lines[1]
+   lastName = lines[2]
+   G = lines[3]
+   PA = lines[4]
+   HR = lines[5]
+   R = lines[6]
+   RBI = lines[7]
+   SB = lines[8]
+   BB = lines[9]
+   K = lines[10]
+   AVG = lines[11]
+   OBP = lines[12]
+   SLG = lines[13]
+   wOBA = lines[14]
+   wRC = lines[15]
 
-   sql = "INSERT INTO Outfielders (FirstName, LastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+   sql = "INSERT INTO Outfielders (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
    database.execute(sql, vals)
 
