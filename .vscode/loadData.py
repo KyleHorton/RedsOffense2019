@@ -199,199 +199,225 @@ file_ThirdBasemen = open("../ThirdBasemen.csv", "r")
 file_Shortstops = open("../Shortstops.csv", "r")
 file_Outfielders = open("../Outfielders.csv", "r")
 
-#reading each data file
-leagueData = csv.reader(file_League, delimiter=',')
-redsData = csv.reader(file_Reds, delimiter=',')
-catchersData = csv.reader(file_Catchers, delimiter=',')
-firstBasemenData = csv.reader(file_FirstBasemen, delimiter=',')
-secondBasemenData = csv.reader(file_SecondBasemen, delimiter=',')
-thirdBasemenData = csv.reader(file_ThirdBasemen, delimiter=',')
-shortstopsBasemenData = csv.reader(file_Shortstops, delimiter=',')
-outfieldersData = csv.reader(file_Outfielders, delimiter=',')
+#methods for reading each data file
+def readLeague():
+    leagueData = csv.reader(file_League, delimiter=',')
 
-#load data for league table
-for lines in leagueData:
-    rank = lines[0]
-    team = lines[1]
-    G = lines[2]
-    PA = lines[3]
-    HR = lines[4]
-    R = lines[5]
-    RBI = lines[6]
-    SB = lines[7]
-    BB = lines[8]
-    K = lines[9]
-    AVG = lines[10]
-    OBP = lines[11]
-    SLG = lines[12]
-    wOBA = lines[13]
-    wRC = lines[14]
+    #load data for league table
+    for lines in leagueData:
+        rank = lines[0]
+        team = lines[1]
+        G = lines[2]
+        PA = lines[3]
+        HR = lines[4]
+        R = lines[5]
+        RBI = lines[6]
+        SB = lines[7]
+        BB = lines[8]
+        K = lines[9]
+        AVG = lines[10]
+        OBP = lines[11]
+        SLG = lines[12]
+        wOBA = lines[13]
+        wRC = lines[14]
 
-    sql = "INSERT INTO League (LeagueRankId, Team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    vals = (rank, team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+        sql = "INSERT INTO League (LeagueRankId, Team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (rank, team, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
-    database.execute(sql, vals)
+        database.execute(sql, vals)
 
-#load data for reds table
-for lines in redsData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   position = lines[3]
-   age = lines[4]
-   height = lines[5]
-   weight = lines[6]
-   country = lines[7]
 
-   sql = "INSERT INTO Reds (RankId, FirstName, LastName, Age, Height, Weight, Country, Position) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (rank, firstName, lastName, age, height, weight, country, position)
+def readReds():
+    redsData = csv.reader(file_Reds, delimiter=',')
 
-   database.execute(sql, vals)
+    #load data for reds table
+    for lines in redsData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        position = lines[3]
+        age = lines[4]
+        height = lines[5]
+        weight = lines[6]
+        country = lines[7]
 
-#load data for catchers table
-for lines in catchersData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+        sql = "INSERT INTO Reds (RankId, FirstName, LastName, Age, Height, Weight, Country, Position) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (rank, firstName, lastName, age, height, weight, country, position)
 
-   sql = "INSERT INTO Catchers (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+        database.execute(sql, vals)
+    
+def readCatchers():
+    catchersData = csv.reader(file_Catchers, delimiter=',')
 
-   database.execute(sql, vals)
+    #load data for catchers table
+    for lines in catchersData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
 
-#load data for firstbasemen table
-for lines in firstBasemenData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+        sql = "INSERT INTO Catchers (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
-   sql = "INSERT INTO FirstBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+        database.execute(sql, vals)
 
-   database.execute(sql, vals)
 
-#load data for secondbasemen table
-for lines in secondBasemenData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+def readFirstBasemen():
+    firstBasemenData = csv.reader(file_FirstBasemen, delimiter=',')
 
-   sql = "INSERT INTO SecondBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+    #load data for first basemen table
+    for lines in firstBasemenData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
 
-   database.execute(sql, vals)
+        sql = "INSERT INTO FirstBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
-#load data for thirdbasemen table
-for lines in thirdBasemenData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+        database.execute(sql, vals)
 
-   sql = "INSERT INTO ThirdBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+def readSecondBasemen():
+    secondBasemenData = csv.reader(file_SecondBasemen, delimiter=',')
 
-   database.execute(sql, vals)
+    #load data for secondbasemen table
+    for lines in secondBasemenData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
 
-#load data for shortstops table
-for lines in shortstopsBasemenData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+        sql = "INSERT INTO SecondBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
-   sql = "INSERT INTO Shortstops (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+        database.execute(sql, vals)
 
-   database.execute(sql, vals)
+def readShortstops():
+    shortstopsBasemenData = csv.reader(file_Shortstops, delimiter=',')
 
-#load data for outfielders table
-for lines in outfieldersData:
-   rank = lines[0]
-   firstName = lines[1]
-   lastName = lines[2]
-   G = lines[3]
-   PA = lines[4]
-   HR = lines[5]
-   R = lines[6]
-   RBI = lines[7]
-   SB = lines[8]
-   BB = lines[9]
-   K = lines[10]
-   AVG = lines[11]
-   OBP = lines[12]
-   SLG = lines[13]
-   wOBA = lines[14]
-   wRC = lines[15]
+    #load data for shortstops table
+    for lines in shortstopsBasemenData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
 
-   sql = "INSERT INTO Outfielders (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-   vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+        sql = "INSERT INTO Shortstops (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
 
-   database.execute(sql, vals)
+        database.execute(sql, vals)
 
+def readThirdBasemen():
+    thirdBasemenData = csv.reader(file_ThirdBasemen, delimiter=',')
+
+    #load data for thirdbasemen table
+    for lines in thirdBasemenData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
+
+        sql = "INSERT INTO ThirdBasemen (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+
+        database.execute(sql, vals)
+
+def readOutfielders():
+    outfieldersData = csv.reader(file_Outfielders, delimiter=',')
+
+    #load data for outfielders table
+    for lines in outfieldersData:
+        rank = lines[0]
+        firstName = lines[1]
+        lastName = lines[2]
+        G = lines[3]
+        PA = lines[4]
+        HR = lines[5]
+        R = lines[6]
+        RBI = lines[7]
+        SB = lines[8]
+        BB = lines[9]
+        K = lines[10]
+        AVG = lines[11]
+        OBP = lines[12]
+        SLG = lines[13]
+        wOBA = lines[14]
+        wRC = lines[15]
+
+        sql = "INSERT INTO Outfielders (FirstName, LastName, TeamRank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (firstName, lastName, rank, G, PA, HR, R, RBI, SB, BB, K, AVG, OBP, SLG, wOBA, wRC)
+
+        database.execute(sql, vals)
+
+#call methods
+readLeague()
+readReds()
+readCatchers()
+readFirstBasemen()
+readSecondBasemen()
+readShortstops()
+readThirdBasemen()
+readOutfielders()
 
 
 database.close(); 
