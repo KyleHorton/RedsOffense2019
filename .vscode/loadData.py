@@ -55,7 +55,7 @@ database.execute('''CREATE TABLE Reds (
     RankId      INT NOT NULL,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
-    Age       INT NOT NULL,
+    DOB       VARCHAR(10) NOT NULL,
     Height    VARCHAR(6),
     Weight    VARCHAR(7),
     Country VARCHAR(25),
@@ -236,13 +236,13 @@ def readReds():
         firstName = lines[1]
         lastName = lines[2]
         position = lines[3]
-        age = lines[4]
+        dob = lines[4]
         height = lines[5]
         weight = lines[6]
         country = lines[7]
 
-        sql = "INSERT INTO Reds (RankId, FirstName, LastName, Age, Height, Weight, Country, Position) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        vals = (rank, firstName, lastName, age, height, weight, country, position)
+        sql = "INSERT INTO Reds (RankId, FirstName, LastName, DOB, Height, Weight, Country, Position) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        vals = (rank, firstName, lastName, dob, height, weight, country, position)
 
         database.execute(sql, vals)
     
