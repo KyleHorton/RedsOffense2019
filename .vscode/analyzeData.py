@@ -69,9 +69,9 @@ def createFigures():
     for line in result:
         names.append(line[0])
         age.append(int(line[1]))
-        runs.append(line[2])
+        runs.append(int(line[2]))
         hr.append(int(line[3]))
-        rbi.append(line[4])
+        rbi.append(int(line[4]))
 
     while (count < 2):  
         fig.add_trace(
@@ -183,10 +183,9 @@ def createFigures():
     ## end HR v RBI Correlation query + visualization
 
     ## roster info query + table ##
-    database.execute("SELECT * FROM Reds;")
+    database.execute("select FirstName, LastName, date_format(DOB, '%c/%e/%Y'), Height, Weight, Country, Position from Reds;")
     result = database.fetchall()
-    fname = []
-    lname = []
+    name = []
     dob = []
     height = []
     weight = []
@@ -194,18 +193,17 @@ def createFigures():
     position = []
 
     for line in result:
-        fname.append(line[1])
-        lname.append(line[2])
-        dob.append((line[3]))
-        height.append(line[4])
-        weight.append(line[5])
-        country.append(line[6])
-        position.append(line[7])
+        name.append(line[0]+ ' ' + line[1])
+        dob.append((line[2]))
+        height.append(line[3])
+        weight.append(line[4])
+        country.append(line[5])
+        position.append(line[6])
 
     ## creates table to display roster info ##
     fig.add_trace(
-        go.Table(header=dict(values=['First Name', 'Last Name', 'Date of Birth', 'Height', 'Weight', 'Country', 'Position']),
-                    cells=dict(values=[fname, lname, dob, height, weight, country, position]), name="Reds 2019 Hitter Info")
+        go.Table(header=dict(values=['Name', 'Date of Birth', 'Height', 'Weight', 'Country', 'Position']),
+                    cells=dict(values=[name, dob, height, weight, country, position]), name="Reds 2019 Hitter Info")
                         ,
         row=3, col=1
     )

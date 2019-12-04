@@ -55,7 +55,7 @@ database.execute('''CREATE TABLE Reds (
     RankId      INT NOT NULL,
     FirstName      VARCHAR(20) NOT NULL,
     LastName      VARCHAR(20) NOT NULL,
-    DOB       VARCHAR(10) NOT NULL,
+    DOB       DATE NOT NULL,
     Height    VARCHAR(6),
     Weight    VARCHAR(7),
     Country VARCHAR(25),
